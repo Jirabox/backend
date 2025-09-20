@@ -1,3 +1,4 @@
+from fastapi.middleware.cors import CORSMiddleware
 from sqlite3.dbapi2 import OperationalError
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, File, UploadFile
@@ -31,6 +32,14 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 chars = list("1234567890-=!£$%^&*()_+QWERTYUIOP{}[]ASDFGHJKL:@~;'#|ZXCVBNM<>,.?`¬")
 
 async def check_retention():
@@ -57,7 +66,7 @@ def create_database_entry(time, retention, extension):
     return filename[0]
 
 @app.post("/upload")
-async def upload(file: UploadFile):
+async def upload(file: UploadFile = File(...)):
     extension = pathlib.Path(str(file.filename)).suffix
     time = datetime.now()
     min_age = 1440
