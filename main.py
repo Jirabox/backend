@@ -40,7 +40,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-chars = list("1234567890-=!£$%^&*()_+QWERTYUIOP{}[]ASDFGHJKL:@~;'#|ZXCVBNM<>,.?`¬")
+chars = list("1234567890-=!£$%^&*()_+QWERTYUIOP{}[]ASDFGHJKL:@~;'|ZXCVBNM<>,.?`¬")
 
 async def check_retention():
     while True:
